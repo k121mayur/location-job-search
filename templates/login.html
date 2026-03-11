@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="card">
+        <h2 class="text-center mb-4">Welcome Back</h2>
+        <form method="POST" action="{{ url_for('main.login') }}">
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="name@siliconmango.in">
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Login</button>
+        </form>
+        <div class="text-center mt-3 text-muted">
+            <small><strong>Test Users:</strong><br>
+            employer@siliconmango.in<br>
+            employee@siliconmango.in<br>
+            (password: password)</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

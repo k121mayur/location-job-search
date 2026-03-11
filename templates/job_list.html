@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <h2>Nearby Jobs</h2>
+    {% if query and query != 'search jobs near me' %}
+        <p class="text-muted mb-3">Showing results for: <strong>{{ query }}</strong></p>
+    {% endif %}
+    
+    <form action="{{ url_for('main.search_jobs') }}" method="GET" class="search-bar">
+        <input type="text" name="q" class="form-control" placeholder="Search by job title..." value="{% if query and query != 'search jobs near me' %}{{ query }}{% endif %}">
+        <button type="submit" class="btn btn-primary" style="width: auto;">Search</button>
+        <a href="{{ url_for('main.employee_dashboard') }}" class="btn btn-outline" style="width: auto;">Back</a>
+    </form>
+</div>
+
+{% if jobs %}
+    {% for job in jobs %}
+    <div class="job-card">
+        <div class="job-header">
+            <h3 class="job-title">{{ job.title }}</h3>
+            <span class="job-distance">{{ job.distance }} km</span>
+        </div>
+        <p class="text-muted"><small>Posted: {{ job.created_at.strftime('%Y-%m-%d') }}</small></p>
+        
+        {% if job.short_description %}
+        <p class="job-desc"><strong>{{ job.short_description }}</strong></p>
+        {% endif %}
+        
+        <p style="white-space: pre-wrap; font-size: 0.95rem;">{{ job.description }}</p>
+        
+        <div style="margin-top: 15px;">
+            <a href="https://www.openstreetmap.org/?mlat={{ job.latitude }}&mlon={{ job.longitude }}#map=16/{{ job.latitude }}/{{ job.longitude }}" target="_blank" class="btn btn-outline" style="display: inline-block; padding: 6px 12px; font-size: 0.85rem; width: auto;">View on Map</a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card text-center">
+        <p class="text-muted" style="margin-bottom: 0;">No jobs found within a 3 km radius{% if query and query != 'search jobs near me' %} matching "{{ query }}"{% endif %}.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

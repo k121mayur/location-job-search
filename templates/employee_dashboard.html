@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Employee Dashboard</h2>
+    <p class="text-muted">Welcome to the employee portal. Your home location is set, meaning you can discover jobs within a 3km radius.</p>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('main.search_jobs', q='search jobs near me') }}" class="btn btn-primary mb-3">Search Jobs Near Me</a>
+        
+        <form action="{{ url_for('main.search_jobs') }}" method="GET" class="search-bar">
+            <input type="text" name="q" class="form-control" placeholder="Search by job title...">
+            <button type="submit" class="btn btn-outline" style="width: auto;">Search</button>
+        </form>
+        
+        <a href="{{ url_for('main.set_home') }}" class="btn btn-outline mt-3">Reset Home Location</a>
+    </div>
+</div>
+{% endblock %}

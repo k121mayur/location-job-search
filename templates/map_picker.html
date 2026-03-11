@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Set Home Location</h2>
+    <p class="text-muted mb-4">Click on the map to set your home location. We will use this to find jobs within a 3 km radius.</p>
+    
+    <form method="POST" action="{{ url_for('main.set_home') }}" id="locationForm">
+        <div id="map"></div>
+        <input type="hidden" id="latitude" name="latitude" required>
+        <input type="hidden" id="longitude" name="longitude" required>
+        
+        <button type="submit" class="btn btn-primary mt-3">Save Location</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var map = L.map('map').setView([20.5937, 78.9629], 5);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = null;
+
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map);
+            }
+
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+        });
+
+        document.getElementById('locationForm').addEventListener('submit', function(e) {
+            if (!document.getElementById('latitude').value || !document.getElementById('longitude').value) {
+                e.preventDefault();
+                alert('Please select a location on the map before saving.');
+            }
+        });
+        
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                map.setView([position.coords.latitude, position.coords.longitude], 12);
+            });
+        }
+    });
+</script>
+{% endblock %}
